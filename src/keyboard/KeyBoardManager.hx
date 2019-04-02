@@ -52,7 +52,7 @@ public function listen(){
             var caller=listeners.get(code);
             st.trigger(Std.string(code));
             if (caller!=null){
-                trace( "popo");
+             
             caller();  // it's a call
             }
             
