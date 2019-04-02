@@ -1,0 +1,21 @@
+█ [ /Users/ut/Documents/LAB/KeyBoard/haxe_libraries ] terminal ./
+/bin/sh: terminal: command not found
+
+█ [ /Users/ut/Documents/LAB/KeyBoard/haxe_libraries ] open terminal
+The file /Users/ut/Documents/LAB/KeyBoard/haxe_libraries/terminal does not exist.
+
+█ [ /Users/ut/Documents/LAB/KeyBoard/haxe_libraries ] lix install gh:haxetink:tink_core
+invalid github url gh:haxetink:tink_core
+
+
+█ [ /Users/ut/Documents/LAB/KeyBoard/haxe_libraries ] haxetink/tink_core
+haxetink/tink_core
+lix install gh:haxetink/tink_core
+
+/bin/sh: haxetink/tink_core: No such file or directory
+
+█ [ /Users/ut/Documents/LAB/KeyBoard/haxe_libraries ] lix install haxelib:tink_core
+already downloaded: haxelib:/tink_core#1.18.0
+mounting as tink_core#1.18.0
+
+ 
