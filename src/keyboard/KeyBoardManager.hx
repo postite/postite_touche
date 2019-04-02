@@ -1,21 +1,7 @@
 package keyboard;
 import keyboard.KeyCode;
 using tink.CoreApi;
-// @:enum abstract Key(Int) from Int to Int{
-//     var Space=32;
-//     var ArrowDown=40;
-//     var ArrowUP=38;
-//     var TOG= 84; //t
-//     var F="f".code;
 
-//     public function toString(){
-//         return switch(this){
-//             case 32: "space";
-//             case _ :"almost implmented";
-//         }
-//     }
-
-// }
 
 typedef Funk =Void->Void;
 
@@ -66,8 +52,8 @@ public function listen(){
             var caller=listeners.get(code);
             st.trigger(Std.string(code));
             if (caller!=null){
+                trace( "popo");
             caller();  // it's a call
-            
             }
             
         }
