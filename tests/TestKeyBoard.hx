@@ -9,7 +9,7 @@ class TestKeyBoard extends utest.Test{
 	var KB:keyboard.KeyBoardManager;
 	public function setup(){
 		KB= keyboard.KeyBoardManager.getInstance();
-		var note= new keyboard.Keynote();
+		var note= new keyboard.KeyNote();
 		//J(doc).on("keydown",fun);
 		//simulateKeyPress("n".code);
 	}

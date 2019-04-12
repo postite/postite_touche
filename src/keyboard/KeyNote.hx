@@ -9,7 +9,7 @@ enum NoteType{
 	Sticky;
 }
 
-class Keynote{
+class KeyNote{
 	static var lay:js.html.DivElement;
 	static var txt:js.html.ParagraphElement;
 	static var sticked:Bool=false;
