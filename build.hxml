@@ -7,6 +7,7 @@
 -lib jQueryExtern
 -lib utest
 -main Test
+-lib postite_note
 #--interp
 -js test.js
 -cmd open test.html

@@ -1,14 +1,15 @@
 import utest.Assert;
 import utest.Async;
-import js.jquery.Helper.*;
+import js.jquery.Helper.J as JQ;
 import js.Browser.document as doc;
-import interact.KeyCode as K;
+import keyboard.KeyCode;
+
 class TestKeyBoard extends utest.Test{
 
-	var KB:interact.KeyBoardManager;
+	var KB:keyboard.KeyBoardManager;
 	public function setup(){
-		KB= interact.KeyBoardManager.getInstance();
-		var note= new interact.Keynote();
+		KB= keyboard.KeyBoardManager.getInstance();
+		var note= new keyboard.Keynote();
 		//J(doc).on("keydown",fun);
 		//simulateKeyPress("n".code);
 	}
@@ -24,25 +25,25 @@ class TestKeyBoard extends utest.Test{
 
 	function testSomething(async:utest.Async) {
   // do your async goodness and remember to call `done()` at the end.
- 	J(doc).on("keydown",function(e) {
-    Assert.equals(K.P,e.which); // put a sensible test here
+ 	JQ(doc).on("keydown",function(e) {
+    Assert.equals(P,e.which); // put a sensible test here
     async.done();
   	});
- 	simulateKeyPress(K.P);
+ 	simulateKeyPress(P);
 	}
 
 	function testKB(async:utest.Async){
-		KB.addListener(K.P ,()->{
+		KB.addListener(P ,()->{
 			
 			Assert.isTrue(true); // put a sensible test here
     		async.done();
 		});
 		
-		createEvent(K.P);
+		createEvent(P);
 	}
 
 	function testSignal(async:utest.Async){
-		KB.addListener(K.M,()->{
+		KB.addListener(M,()->{
 			Assert.isTrue(true);
 			KB.signal.handle(function(s){
 				Assert.equals("M",String.fromCharCode(Std.parseInt(s)));
@@ -52,14 +53,14 @@ class TestKeyBoard extends utest.Test{
 			return true;
 			
 		});
-		createEvent.bind(K.M);
+		createEvent.bind(M);
 	}
 
 
-	function simulateKeyPress(character:interact.KeyCode) {
+	function simulateKeyPress(character:keyboard.KeyCode) {
 	var e = new js.jquery.Event('keydown');
   	 e.which=character;
-	J(doc).trigger(e);
+	JQ(doc).trigger(e);
 	}
 
 	function createEvent(kc:K){

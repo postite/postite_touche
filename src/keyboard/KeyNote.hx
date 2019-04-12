@@ -24,76 +24,9 @@ class Keynote{
 		trace( "onTime");
 		var char=String.fromCharCode(Std.parseInt(s));
 		char=(char !="" )? char : s;
-		display("touched" + char,Simple);
+		new postite.Note().notify("touched" + char,Simple);
+		//display("touched" + char,Simple);
 		return true;
-	}
-
-	public function note(msg:String, noteType:NoteType){
-		noteType=(noteType!=null)? noteType : Simple;
-		display(msg,noteType);
-	}
-	function display(msg,noteType:NoteType){
-		#if debug trace("display"); #end
-		switch noteType{
-
-			case Simple:
-				displaySimple(msg);
-
-			case Sticky:
-				displaySticky(msg);
-
-		}
-
-
-		
-		
-	}
-
-	function displaySimple(msg){
-
-		removeLast();
-		timed= new haxe.Timer(1000);
-		
-		createLayout();
-		doc.body.appendChild(lay);
-		updateMsg(msg);
-	}
-
-	function displaySticky(msg){
-
-		//removeLast();
-		
-		if (!sticked)
-		createLayout();
-		updateMsg(msg);
-
-		//timed.run=removeLast;
-
-	}
-
-	function updateMsg(msg){
-		txt.innerHTML=msg;
-	}
-
-	static function createLayout(){
-		lay= cast doc.createElement("div");
-		lay.style.backgroundColor="#ddd";
-		lay.style.position="absolute";
-		lay.style.zIndex="999";
-		lay.style.top=lay.style.right="0";
-		lay.classList.add("note");
-		txt= cast doc.createElement("p");
-		lay.appendChild(txt);
-
-		doc.body.appendChild(lay);
-	} 
-	static function removeLast(){
-		if ( lay!=null)
-		lay.remove();
-		if( timed !=null){
-		timed.stop();
-		timed=null;
-		}	
 	}
 
 }

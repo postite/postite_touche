@@ -1,7 +1,5 @@
  package keyboard;
 
-
-
 @:enum abstract KeyCode(Int) from Int to Int {
 	var Unknown = 0;
 	var Back = 1; // Android
