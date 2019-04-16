@@ -1,0 +1,15 @@
+{
+    "name": "postite_touche",
+    "url" : "",
+    "license": "MIT",
+    "tags": ["keyboard","tablet","utils"],
+    "description": "",
+    "version": "0.0.1",
+    "classPath": "src/",
+    "releasenote": "init",
+    "contributors": ["postite"],
+    "dependencies": {
+        "postite_note":"git:https://github.com/postite/postite_note.git"
+    
+    }
+}
