@@ -330,7 +330,7 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 	KB: null
 	,setup: function() {
 		this.KB = keyboard_KeyBoardManager.getInstance();
-		var note = new keyboard_Keynote();
+		var note = new keyboard_KeyNote();
 	}
 	,testOne: function() {
 		utest_Assert.isTrue(true,null,{ fileName : "tests/TestKeyBoard.hx", lineNumber : 18, className : "TestKeyBoard", methodName : "testOne"});
@@ -1261,71 +1261,20 @@ var keyboard_NoteType = $hxEnums["keyboard.NoteType"] = { __ename__ : "keyboard.
 	,Simple: {_hx_index:0,__enum__:"keyboard.NoteType",toString:$estr}
 	,Sticky: {_hx_index:1,__enum__:"keyboard.NoteType",toString:$estr}
 };
-var keyboard_Keynote = function() {
+var keyboard_KeyNote = function() {
 	keyboard_KeyBoardManager.getInstance().signal.handle($bind(this,this.onTime));
 };
-keyboard_Keynote.__name__ = "keyboard.Keynote";
-keyboard_Keynote.createLayout = function() {
-	keyboard_Keynote.lay = window.document.createElement("div");
-	keyboard_Keynote.lay.style.backgroundColor = "#ddd";
-	keyboard_Keynote.lay.style.position = "absolute";
-	keyboard_Keynote.lay.style.zIndex = "999";
-	keyboard_Keynote.lay.style.top = keyboard_Keynote.lay.style.right = "0";
-	keyboard_Keynote.lay.classList.add("note");
-	keyboard_Keynote.txt = window.document.createElement("p");
-	keyboard_Keynote.lay.appendChild(keyboard_Keynote.txt);
-	window.document.body.appendChild(keyboard_Keynote.lay);
-};
-keyboard_Keynote.removeLast = function() {
-	if(keyboard_Keynote.lay != null) {
-		keyboard_Keynote.lay.remove();
-	}
-	if(keyboard_Keynote.timed != null) {
-		keyboard_Keynote.timed.stop();
-		keyboard_Keynote.timed = null;
-	}
-};
-keyboard_Keynote.prototype = {
+keyboard_KeyNote.__name__ = "keyboard.KeyNote";
+keyboard_KeyNote.prototype = {
 	onTime: function(s) {
-		haxe_Log.trace("onTime",{ fileName : "src/keyboard/Keynote.hx", lineNumber : 24, className : "keyboard.Keynote", methodName : "onTime"});
+		haxe_Log.trace("onTime",{ fileName : "src/keyboard/KeyNote.hx", lineNumber : 24, className : "keyboard.KeyNote", methodName : "onTime"});
 		var code = Std.parseInt(s);
 		var char = String.fromCodePoint(code);
 		char = char != "" ? char : s;
 		new postite_Note().notify("touched" + char,postite_NoteType.Simple);
 		return true;
 	}
-	,note: function(msg,noteType) {
-		noteType = noteType != null ? noteType : keyboard_NoteType.Simple;
-		this.display(msg,noteType);
-	}
-	,display: function(msg,noteType) {
-		noteType = noteType != null ? noteType : keyboard_NoteType.Simple;
-		switch(noteType._hx_index) {
-		case 0:
-			this.displaySimple(msg);
-			break;
-		case 1:
-			this.displaySticky(msg);
-			break;
-		}
-	}
-	,displaySimple: function(msg) {
-		keyboard_Keynote.removeLast();
-		keyboard_Keynote.timed = new haxe_Timer(1000);
-		keyboard_Keynote.createLayout();
-		window.document.body.appendChild(keyboard_Keynote.lay);
-		this.updateMsg(msg);
-	}
-	,displaySticky: function(msg) {
-		if(!keyboard_Keynote.sticked) {
-			keyboard_Keynote.createLayout();
-		}
-		this.updateMsg(msg);
-	}
-	,updateMsg: function(msg) {
-		keyboard_Keynote.txt.innerHTML = msg;
-	}
-	,__class__: keyboard_Keynote
+	,__class__: keyboard_KeyNote
 };
 var postite_CssHack = function() {
 	if(postite_CssHack.sheet != null) {
@@ -1353,8 +1302,9 @@ postite_CssHack.prototype = {
 	}
 	,__class__: postite_CssHack
 };
-var postite_NoteType = $hxEnums["postite.NoteType"] = { __ename__ : "postite.NoteType", __constructs__ : ["Simple"]
+var postite_NoteType = $hxEnums["postite.NoteType"] = { __ename__ : "postite.NoteType", __constructs__ : ["Simple","Stay"]
 	,Simple: {_hx_index:0,__enum__:"postite.NoteType",toString:$estr}
+	,Stay: {_hx_index:1,__enum__:"postite.NoteType",toString:$estr}
 };
 var postite_Note = function() {
 };
@@ -1365,7 +1315,16 @@ postite_Note.prototype = {
 		if(type == null) {
 			type = postite_NoteType.Simple;
 		}
-		this.noteBox = new postite_NoteBox().avecTitre("ého").avecTexte(msg).appendTo(window.document.body).disapear(1000);
+		var tmp;
+		switch(type._hx_index) {
+		case 0:
+			tmp = new postite_NoteBox().avecTitre("ého").avecTexte(msg).appendTo(window.document.body).disapear(1000);
+			break;
+		case 1:
+			tmp = new postite_NoteBox().avecTitre("ého").avecTexte(msg).appendTo(window.document.body);
+			break;
+		}
+		this.noteBox = tmp;
 		return this;
 	}
 	,kill: function() {
@@ -1426,6 +1385,7 @@ postite_NoteBox.prototype = {
 	,createBox: function() {
 		var box = window.document.createElement("div");
 		box.classList.add("postite_note");
+		box.classList.add("bababab");
 		this.hed = window.document.createElement("H4");
 		this.hed.innerHTML = this.titre;
 		this.content = window.document.createElement("p");
@@ -1434,7 +1394,7 @@ postite_NoteBox.prototype = {
 		box.appendChild(this.content);
 		var css = new postite_CssHack();
 		css.insertRule("h4{\n            color:pink;\n            }\n            ");
-		css.insertRules(".postite_note{\n                background-color:gray;\n                position:fixed;\n                right:10px;\n                width:100px;\n                padding:10px;\n                font-family:Sans-serif;\n\n            }\n            .postite_note h4{\n                margin:0;\n                background-color:black;\n                color:white;\n                font-size:3em;\n            }\n            .postite_note p{\n                color:white;\n            }");
+		css.insertRules(".postite_note{\n                z-index=999;\n                background-color:gray;\n                position:absolute;\n                right:10px;\n                width:100px;\n                padding:10px;\n                font-family:Sans-serif;\n\n            }\n            .postite_note h4{\n                margin:0;\n                background-color:black;\n                color:white;\n                font-size:3em;\n            }\n            .postite_note p{\n                color:white;\n            }");
 		return box;
 	}
 	,__class__: postite_NoteBox
@@ -6376,7 +6336,7 @@ if(typeofJQuery != "undefined" && $.fn != null) {
 		return new js_jquery_JqIterator(this);
 	};
 }
-keyboard_Keynote.sticked = false;
+keyboard_KeyNote.sticked = false;
 tink_core__$Callback_Callback_$Impl_$.depth = 0;
 tink_core__$Callback_Callback_$Impl_$.MAX_DEPTH = 1000;
 tink_core__$Future_NeverFuture.inst = new tink_core__$Future_NeverFuture();

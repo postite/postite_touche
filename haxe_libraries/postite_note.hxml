@@ -1,4 +1,3 @@
--D postite_note=0.0.1
-# @install: lix --silent download "gh://github.com/postite/postite_note#fbcc4a0810209e37d612bd437f695fae646b23b6" into postite_note/0.0.0/github/fbcc4a0810209e37d612bd437f695fae646b23b6
-#-cp ${HAXE_LIBCACHE}/postite_note/0.0.0/github/fbcc4a0810209e37d612bd437f695fae646b23b6/src
--cp /Users/ut/Documents/LAB/postite_note/src
+-D postite_note=0.0.3
+# @install: lix --silent download "gh://github.com/postite/postite_note#825291341403ee7cda68b2695a5eba45213de3df" into postite_note/0.0.3/github/825291341403ee7cda68b2695a5eba45213de3df
+-cp ${HAXE_LIBCACHE}/postite_note/0.0.3/github/825291341403ee7cda68b2695a5eba45213de3df/src/

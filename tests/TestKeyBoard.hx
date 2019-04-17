@@ -63,7 +63,7 @@ class TestKeyBoard extends utest.Test{
 	JQ(doc).trigger(e);
 	}
 
-	function createEvent(kc:K){
+	function createEvent(kc:KeyCode){
 		trace( "createEvent" +kc);
 		var event = new js.html.KeyboardEvent("keyup",{keyCode:kc});
 		doc.dispatchEvent(event);
