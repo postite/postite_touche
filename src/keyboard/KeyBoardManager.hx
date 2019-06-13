@@ -35,9 +35,14 @@ public function wakeListener(key,func){
 public function addListener(key:KeyCode,func:Funk){
     listeners.set(key,func);
     listen();
-    trace( listeners);
-
+    trace(listeners);
 }
+
+
+public function addListenerOut(key:KeyCode,func:Funk,forkey:KeyCode){
+    throw 'not implmented yed';
+}
+
 public function removeListener(?key:KeyCode,?func:Funk){
     removeInMap(listeners,key,func);
     listen();
@@ -52,13 +57,12 @@ public function listen(){
             var caller=listeners.get(code);
             st.trigger(Std.string(code));
             if (caller!=null){
-             
             caller();  // it's a call
             }
             
         }
     js.Browser.document.addEventListener("keyup",mok);
-    
+   
     
 }
 
