@@ -26,6 +26,14 @@ var plugin:Plugin;
     
 }
 
+public static function supported():Bool{
+    #if js
+   if (  untyped(window.PointerEvent) !=null) return true;
+   return false;
+    #end
+    return false;
+}
+
 
 
 public function pen(){

@@ -58,6 +58,8 @@ public function listen(){
             
         }
     js.Browser.document.addEventListener("keyup",mok);
+    
+    
 }
 
 public function restart(){
