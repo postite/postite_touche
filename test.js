@@ -298,6 +298,7 @@ Test.main = function() {
 	$(window.document).ready(function(e) {
 		haxe_Log.trace("yo",{ fileName : "Test.hx", lineNumber : 13, className : "Test", methodName : "main"});
 		var runner = new utest_Runner();
+		runner.addCase(new TestKeyBoard());
 		runner.addCase(new TestAllKeys());
 		utest_ui_Report.create(runner);
 		runner.run();
@@ -346,20 +347,12 @@ TestAllKeys.prototype = $extend(utest_Test.prototype,{
 		var note = new keyboard_KeyNote();
 	}
 	,testAllKeys: function(async) {
-		this.KB.addListener(999,function() {
+		this.KB.addListener(999,function(k) {
 			haxe_Log.trace("popopo",{ fileName : "TestAllKeys.hx", lineNumber : 19, className : "TestAllKeys", methodName : "testAllKeys"});
 			utest_Assert.isTrue(true,null,{ fileName : "TestAllKeys.hx", lineNumber : 20, className : "TestAllKeys", methodName : "testAllKeys"});
 			async.done();
 		});
 		TestKeyBoard.createEvent(76);
-	}
-	,testNullKey: function() {
-		TestKeyBoard.createEvent(null);
-		utest_Assert.fail(null,{ fileName : "TestAllKeys.hx", lineNumber : 31, className : "TestAllKeys", methodName : "testNullKey"});
-	}
-	,testZeroKey: function() {
-		TestKeyBoard.createEvent(0);
-		utest_Assert.fail(null,{ fileName : "TestAllKeys.hx", lineNumber : 39, className : "TestAllKeys", methodName : "testZeroKey"});
 	}
 	,__initializeUtest__: function() {
 		var _gthis = this;
@@ -372,14 +365,6 @@ TestAllKeys.prototype = $extend(utest_Test.prototype,{
 			var async = new utest_Async(250);
 			_gthis.testAllKeys(async);
 			return async;
-		}});
-		init.tests.push({ name : "testNullKey", execute : function() {
-			_gthis.testNullKey();
-			return utest_Async.getResolved();
-		}});
-		init.tests.push({ name : "testZeroKey", execute : function() {
-			_gthis.testZeroKey();
-			return utest_Async.getResolved();
 		}});
 		return init;
 	}
@@ -422,7 +407,7 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 		TestKeyBoard.simulateKeyPress(80);
 	}
 	,testKB: function(async) {
-		this.KB.addListener(80,function() {
+		this.KB.addListener(80,function(k) {
 			utest_Assert.isTrue(true,null,{ fileName : "TestKeyBoard.hx", lineNumber : 66, className : "TestKeyBoard", methodName : "testKB"});
 			async.done();
 			return;
@@ -430,7 +415,7 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 		TestKeyBoard.createEvent(80);
 	}
 	,testKB2: function(async) {
-		this.KB.addListener(82,function() {
+		this.KB.addListener(82,function(k) {
 			utest_Assert.isTrue(true,null,{ fileName : "TestKeyBoard.hx", lineNumber : 78, className : "TestKeyBoard", methodName : "testKB2"});
 			async.done();
 			return;
@@ -1491,10 +1476,10 @@ keyboard_KeyBoardManager.prototype = {
 			tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.st.handlers,Std.string(code));
 			var allkeys = _gthis.listeners.h[999];
 			if(allkeys != null) {
-				allkeys();
+				allkeys(code);
 			}
 			if(caller != null) {
-				caller();
+				caller(code);
 			}
 		};
 		window.document.addEventListener("keyup",this.mok);

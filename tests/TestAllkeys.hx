@@ -15,7 +15,7 @@ class TestAllKeys extends utest.Test{
 	}
     @:timeout(250)
     public function testAllKeys(async:utest.Async){
-        KB.addListener(AllKeys, function(){
+        KB.addListener(AllKeys,function(k){
             trace( "popopo");
             Assert.isTrue(1==1);
             async.done();
@@ -25,19 +25,11 @@ class TestAllKeys extends utest.Test{
 
 
   
-    public function testNullKey(){
-       
-        TestKeyBoard.createEvent(null);
-        Assert.fail();
-    }
+  
 
 
    
-    public function testZeroKey(){
-        
-        TestKeyBoard.createEvent(0);
-        Assert.fail();
-    }
+ 
 
 
 }

@@ -3,7 +3,7 @@ import keyboard.KeyCode;
 using tink.CoreApi;
 
 
-typedef Funk =Void->Void;
+typedef Funk =KeyCode->Void;
 
 class KeyBoardManager{
 
@@ -66,12 +66,12 @@ public function listen(){
             st.trigger(Std.string(code));
             var allkeys=listeners.get(KeyCode.AllKeys);
             if( allkeys!=null){
-                allkeys();//callAllkeys
+                allkeys(code);//callAllkeys
             }
             if (caller!=null){
 
             
-            caller();  // it's a call
+            caller(code);  // it's a call
             }
             
         }

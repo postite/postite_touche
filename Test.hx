@@ -12,7 +12,7 @@ class Test {
 		J(doc).ready(e->{
 			trace( "yo");
 		var runner = new Runner();
-    	//runner.addCase(new TestKeyBoard());
+    	runner.addCase(new TestKeyBoard());
     	runner.addCase(new TestAllKeys());
     	//runner.addCase(new TestCase2());
     	Report.create(runner);

@@ -62,7 +62,7 @@ class TestKeyBoard extends utest.Test {
 
 	@:timeout(250)
 	function testKB(async:utest.Async) {
-		KB.addListener(P, () -> {
+		KB.addListener(P, (k) -> {
 			Assert.isTrue(true); // put a sensible test here
 			async.done();
 		});
@@ -74,7 +74,7 @@ class TestKeyBoard extends utest.Test {
 	@:timeout(250)
 	function testKB2(async:utest.Async) {
 		
-		KB.addListener(R, () -> {
+		KB.addListener(R, (?k) -> {
 			Assert.isTrue(true); // put a sensible test here
 			async.done();
 		});
