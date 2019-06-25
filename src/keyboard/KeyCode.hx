@@ -1,6 +1,7 @@
  package keyboard;
 
 @:enum abstract KeyCode(Int) from Int to Int {
+	var AllKeys=999;
 	var Unknown = 0;
 	var Back = 1; // Android
 	var Cancel = 3;

@@ -33,6 +33,7 @@ public function wakeListener(key,func){
 
 }
 public function addListener(key:KeyCode,func:Funk){
+   
     listeners.set(key,func);
     listen();
     trace(listeners);
@@ -48,15 +49,28 @@ public function removeListener(?key:KeyCode,?func:Funk){
     listen();
 }
 
+public function removeAll(){
+    for( n in listeners.keys())
+    removeListener(n);
+    restart();
+}
+
 var mok:js.html.KeyboardEvent->Void;
 public function listen(){
     restart();
      mok=function(e){
          trace("key code="+ e.keyCode);
             var code:KeyCode = e.keyCode;
+            if (code==null || code==0) throw "nope key";
             var caller=listeners.get(code);
             st.trigger(Std.string(code));
+            var allkeys=listeners.get(KeyCode.AllKeys);
+            if( allkeys!=null){
+                allkeys();//callAllkeys
+            }
             if (caller!=null){
+
+            
             caller();  // it's a call
             }
             
