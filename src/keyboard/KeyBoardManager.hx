@@ -3,7 +3,7 @@ import keyboard.KeyCode;
 using tink.CoreApi;
 
 
-typedef Funk =KeyCode->Void;
+typedef Funk= KeyCode->Void;
 
 class KeyBoardManager{
 
