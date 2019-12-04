@@ -1406,6 +1406,7 @@ js_jquery_JqIterator.prototype = {
 };
 var keyboard_KeyBoardManager = function() {
 	this.enabled = true;
+	this.listenersOnce = new haxe_ds_IntMap();
 	this.listeners = new haxe_ds_IntMap();
 	this.st = tink_core__$Signal_Signal_$Impl_$.trigger();
 	this.signal = this.st;
@@ -1435,6 +1436,7 @@ keyboard_KeyBoardManager.removeInMap = function(it,key,val) {
 };
 keyboard_KeyBoardManager.prototype = {
 	listeners: null
+	,listenersOnce: null
 	,enabled: null
 	,signal: null
 	,st: null
@@ -1446,6 +1448,12 @@ keyboard_KeyBoardManager.prototype = {
 		this.listeners.h[key] = func;
 		this.listen();
 		haxe_Log.trace(this.listeners.toString(),{ fileName : "KeyBoardManager.hx", lineNumber : 39, className : "keyboard.KeyBoardManager", methodName : "addListener"});
+		return this;
+	}
+	,addOnce: function(key,func) {
+		this.listenersOnce.h[key] = func;
+		this.listenOnce();
+		return this;
 	}
 	,addListenerOut: function(key,func,forkey) {
 		throw new js__$Boot_HaxeError("not implmented yed");
@@ -1467,7 +1475,7 @@ keyboard_KeyBoardManager.prototype = {
 		var _gthis = this;
 		this.restart();
 		this.mok = function(e) {
-			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 62, className : "keyboard.KeyBoardManager", methodName : "listen"});
+			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 68, className : "keyboard.KeyBoardManager", methodName : "listen"});
 			var code = e.keyCode;
 			if(code == null || code == 0) {
 				throw new js__$Boot_HaxeError("nope key");
@@ -1480,6 +1488,29 @@ keyboard_KeyBoardManager.prototype = {
 			}
 			if(caller != null) {
 				caller(code);
+			}
+		};
+		window.document.addEventListener("keyup",this.mok);
+	}
+	,listenOnce: function() {
+		var _gthis = this;
+		this.restart();
+		this.mok = function(e) {
+			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 90, className : "keyboard.KeyBoardManager", methodName : "listenOnce"});
+			var code = e.keyCode;
+			if(code == null || code == 0) {
+				throw new js__$Boot_HaxeError("nope key");
+			}
+			var caller = _gthis.listenersOnce.h[code];
+			tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.st.handlers,Std.string(code));
+			var allkeys = _gthis.listenersOnce.h[999];
+			if(allkeys != null) {
+				allkeys(code);
+			}
+			if(caller != null) {
+				caller(code);
+				caller = null;
+				_gthis.listenersOnce.remove(code);
 			}
 		};
 		window.document.addEventListener("keyup",this.mok);

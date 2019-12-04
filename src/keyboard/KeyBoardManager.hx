@@ -8,7 +8,7 @@ typedef Funk= KeyCode->Void;
 class KeyBoardManager{
 
  var listeners:Map<KeyCode,Funk>= new Map();
-
+ var listenersOnce:Map<KeyCode,Funk>= new Map();
  public var enabled:Bool=true;
  public var signal:Signal<String>;
  private var st:SignalTrigger<String>;
@@ -37,7 +37,12 @@ public function addListener(key:KeyCode,func:Funk):KeyBoardManager{
     listeners.set(key,func);
     listen();
     trace(listeners);
-    return this
+    return this;
+}
+public function addOnce(key:KeyCode,func:Funk):KeyBoardManager{
+    listenersOnce.set(key,func);
+    listenOnce();
+    return this;
 }
 
 
@@ -70,7 +75,6 @@ public function listen(){
                 allkeys(code);//callAllkeys
             }
             if (caller!=null){
-
             
             caller(code);  // it's a call
             }
@@ -80,7 +84,31 @@ public function listen(){
    
     
 }
-
+public function listenOnce(){
+    restart();
+     mok=function(e){
+         trace("key code="+ e.keyCode);
+            var code:KeyCode = e.keyCode;
+            if (code==null || code==0) throw "nope key";
+            var caller=listenersOnce.get(code);
+            st.trigger(Std.string(code));
+            var allkeys=listenersOnce.get(KeyCode.AllKeys);
+            if( allkeys!=null){
+                allkeys(code);//callAllkeys
+            }
+            if (caller!=null){
+            
+            caller(code);  // it's a call
+            caller=null;
+            listenersOnce.remove(code);
+            
+            }
+            
+        }
+    js.Browser.document.addEventListener("keyup",mok);
+   
+    
+}
 public function restart(){
     if( mok !=null)
     js.Browser.document.removeEventListener("keyup",mok);
