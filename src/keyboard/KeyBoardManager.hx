@@ -32,11 +32,12 @@ public function muteListener(key,func){
 public function wakeListener(key,func){
 
 }
-public function addListener(key:KeyCode,func:Funk){
+public function addListener(key:KeyCode,func:Funk):KeyBoardManager{
    
     listeners.set(key,func);
     listen();
     trace(listeners);
+    return this
 }
 
 
