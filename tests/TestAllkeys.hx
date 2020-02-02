@@ -12,24 +12,15 @@ class TestAllKeys extends utest.Test{
 		var note= new keyboard.KeyNote();
 		//J(doc).on("keydown",fun);
 		//simulateKeyPress("n".code);
-	}
+    }
+    
     @:timeout(250)
     public function testAllKeys(async:utest.Async){
-        KB.addListener(AllKeys,function(k){
+        KB.addListener(AllKeys,function(){
             trace( "popopo");
             Assert.isTrue(1==1);
             async.done();
         });
         TestKeyBoard.createEvent(L);
     }
-
-
-  
-  
-
-
-   
- 
-
-
 }

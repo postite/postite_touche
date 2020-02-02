@@ -1,5 +1,8 @@
  package keyboard;
-
+ typedef ModKey={
+	key:KeyCode,
+	?mod:Mod
+}
 @:enum abstract KeyCode(Int) from Int to Int {
 	var AllKeys=999;
 	var Unknown = 0;
@@ -189,4 +192,16 @@
 	var Zoom = 251;
 	var PA1 = 253;
 	var WinOemClear = 254;
+
+
+
+
+
+}
+
+@:enum abstract Mod(Int){
+	var Shift = 16;
+	var Control = 17;
+	var Alt = 18;
+	var Meta = 224;
 }

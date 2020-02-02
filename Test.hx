@@ -14,6 +14,8 @@ class Test {
 		var runner = new Runner();
     	runner.addCase(new TestKeyBoard());
     	runner.addCase(new TestAllKeys());
+		 runner.addCase(new TestModifier());
+		 
     	//runner.addCase(new TestCase2());
     	Report.create(runner);
     	runner.run();

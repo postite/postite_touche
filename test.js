@@ -300,6 +300,7 @@ Test.main = function() {
 		var runner = new utest_Runner();
 		runner.addCase(new TestKeyBoard());
 		runner.addCase(new TestAllKeys());
+		runner.addCase(new TestModifier());
 		utest_ui_Report.create(runner);
 		runner.run();
 		return;
@@ -307,12 +308,12 @@ Test.main = function() {
 };
 Test.doIt = function(e) {
 	$(window.document).on("keydown",null,function(e1) {
-		haxe_Log.trace("olé",{ fileName : "Test.hx", lineNumber : 27, className : "Test", methodName : "doIt"});
+		haxe_Log.trace("olé",{ fileName : "Test.hx", lineNumber : 29, className : "Test", methodName : "doIt"});
 		return;
 	});
 	Test.simulateKeyPress(110);
-	haxe_Log.trace("doIt",{ fileName : "Test.hx", lineNumber : 29, className : "Test", methodName : "doIt"});
-	haxe_Log.trace($("document"),{ fileName : "Test.hx", lineNumber : 30, className : "Test", methodName : "doIt"});
+	haxe_Log.trace("doIt",{ fileName : "Test.hx", lineNumber : 31, className : "Test", methodName : "doIt"});
+	haxe_Log.trace($("document"),{ fileName : "Test.hx", lineNumber : 32, className : "Test", methodName : "doIt"});
 };
 Test.simulateKeyPress = function(character) {
 	var e = new $.Event("keydown");
@@ -347,9 +348,9 @@ TestAllKeys.prototype = $extend(utest_Test.prototype,{
 		var note = new keyboard_KeyNote();
 	}
 	,testAllKeys: function(async) {
-		this.KB.addListener(999,function(k) {
-			haxe_Log.trace("popopo",{ fileName : "TestAllKeys.hx", lineNumber : 19, className : "TestAllKeys", methodName : "testAllKeys"});
-			utest_Assert.isTrue(true,null,{ fileName : "TestAllKeys.hx", lineNumber : 20, className : "TestAllKeys", methodName : "testAllKeys"});
+		this.KB.addListener(999,function() {
+			haxe_Log.trace("popopo",{ fileName : "TestAllKeys.hx", lineNumber : 20, className : "TestAllKeys", methodName : "testAllKeys"});
+			utest_Assert.isTrue(true,null,{ fileName : "TestAllKeys.hx", lineNumber : 21, className : "TestAllKeys", methodName : "testAllKeys"});
 			async.done();
 		});
 		TestKeyBoard.createEvent(76);
@@ -407,7 +408,7 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 		TestKeyBoard.simulateKeyPress(80);
 	}
 	,testKB: function(async) {
-		this.KB.addListener(80,function(k) {
+		this.KB.addListener(80,function() {
 			utest_Assert.isTrue(true,null,{ fileName : "TestKeyBoard.hx", lineNumber : 66, className : "TestKeyBoard", methodName : "testKB"});
 			async.done();
 			return;
@@ -415,7 +416,7 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 		TestKeyBoard.createEvent(80);
 	}
 	,testKB2: function(async) {
-		this.KB.addListener(82,function(k) {
+		this.KB.addListener(82,function() {
 			utest_Assert.isTrue(true,null,{ fileName : "TestKeyBoard.hx", lineNumber : 78, className : "TestKeyBoard", methodName : "testKB2"});
 			async.done();
 			return;
@@ -455,6 +456,128 @@ TestKeyBoard.prototype = $extend(utest_Test.prototype,{
 		return init;
 	}
 	,__class__: TestKeyBoard
+});
+var TestModifier = function() {
+	utest_Test.call(this);
+};
+TestModifier.__name__ = ["TestModifier"];
+TestModifier.simulateKeyPress = function(character) {
+	var e = new $.Event("keydown");
+	e.which = character;
+	$(window.document).trigger(e);
+};
+TestModifier.createEvent = function(kc,modifier) {
+	var altKey = false;
+	var shiftKey = false;
+	var ctrlKey = false;
+	var metaKey = false;
+	haxe_Log.trace(modifier,{ fileName : "TestModifier.hx", lineNumber : 117, className : "TestModifier", methodName : "createEvent"});
+	if(modifier != null) {
+		switch(modifier) {
+		case 16:
+			shiftKey = true;
+			break;
+		case 17:
+			ctrlKey = true;
+			break;
+		case 18:
+			altKey = true;
+			break;
+		case 224:
+			metaKey = true;
+			break;
+		}
+	}
+	haxe_Log.trace("createEvent  " + kc,{ fileName : "TestModifier.hx", lineNumber : 126, className : "TestModifier", methodName : "createEvent"});
+	var event = new KeyboardEvent("keyup",{ keyCode : kc, altKey : altKey, metaKey : metaKey, ctrlKey : ctrlKey, shiftKey : shiftKey});
+	haxe_Log.trace(event.ctrlKey,{ fileName : "TestModifier.hx", lineNumber : 128, className : "TestModifier", methodName : "createEvent"});
+	window.document.dispatchEvent(event);
+};
+TestModifier.__super__ = utest_Test;
+TestModifier.prototype = $extend(utest_Test.prototype,{
+	KB: null
+	,setup: function() {
+		this.KB = keyboard_KeyBoardManager.getInstance();
+		var note = new keyboard_KeyNote();
+	}
+	,teardown: function() {
+		haxe_Log.trace("restart",{ fileName : "TestModifier.hx", lineNumber : 19, className : "TestModifier", methodName : "teardown"});
+		this.KB.removeAll();
+		haxe_Log.trace(Lambda.count(this.KB.listeners),{ fileName : "TestModifier.hx", lineNumber : 21, className : "TestModifier", methodName : "teardown"});
+	}
+	,testOne: function() {
+		utest_Assert.isTrue(true,null,{ fileName : "TestModifier.hx", lineNumber : 25, className : "TestModifier", methodName : "testOne"});
+	}
+	,testAltKey: function(async) {
+		this.KB.addListener(80,function() {
+			utest_Assert.isTrue(true,null,{ fileName : "TestModifier.hx", lineNumber : 66, className : "TestModifier", methodName : "testAltKey"});
+			async.done();
+			return;
+		},18);
+		TestModifier.createEvent(80,18);
+	}
+	,testControl: function(async) {
+		this.KB.addListener(82,function() {
+			utest_Assert.isTrue(true,null,{ fileName : "TestModifier.hx", lineNumber : 76, className : "TestModifier", methodName : "testControl"});
+			async.done();
+			return;
+		},17);
+		TestModifier.createEvent(82,17);
+	}
+	,testMeta: function(async) {
+		this.KB.addListener(82,function() {
+			utest_Assert.isTrue(true,null,{ fileName : "TestModifier.hx", lineNumber : 86, className : "TestModifier", methodName : "testMeta"});
+			async.done();
+			return;
+		},224);
+		TestModifier.createEvent(82,224);
+	}
+	,testShift: function(async) {
+		this.KB.addListener(82,function() {
+			utest_Assert.isTrue(true,null,{ fileName : "TestModifier.hx", lineNumber : 97, className : "TestModifier", methodName : "testShift"});
+			async.done();
+			return;
+		},16);
+		TestModifier.createEvent(82,16);
+	}
+	,__initializeUtest__: function() {
+		var _gthis = this;
+		var init = utest_Test.prototype.__initializeUtest__.call(this);
+		init.accessories.setup = function() {
+			_gthis.setup();
+			return utest_Async.getResolved();
+		};
+		init.accessories.teardown = function() {
+			_gthis.teardown();
+			return utest_Async.getResolved();
+		};
+		init.tests.push({ name : "testOne", execute : function() {
+			_gthis.testOne();
+			return utest_Async.getResolved();
+		}});
+		init.tests.push({ name : "testAltKey", execute : function() {
+			var async = new utest_Async(250);
+			_gthis.testAltKey(async);
+			return async;
+		}});
+		init.tests.push({ name : "testControl", execute : function() {
+			var async1 = new utest_Async(300);
+			_gthis.testControl(async1);
+			return async1;
+		}});
+		init.tests.push({ name : "testMeta", execute : function() {
+			var async2 = new utest_Async(400);
+			_gthis.testMeta(async2);
+			return async2;
+		}});
+		init.tests.push({ name : "testShift", execute : function() {
+			var async3 = new utest_Async(600);
+			_gthis.testShift(async3);
+			return async3;
+		}});
+		return init;
+	}
+	,__class__: TestModifier
 });
 var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
 ValueType.TNull = ["TNull",0];
@@ -752,57 +875,6 @@ haxe_Timer.prototype = {
 var haxe_ds_Either = { __ename__ : ["haxe","ds","Either"], __constructs__ : ["Left","Right"] };
 haxe_ds_Either.Left = function(v) { var $x = ["Left",0,v]; $x.__enum__ = haxe_ds_Either; $x.toString = $estr; return $x; };
 haxe_ds_Either.Right = function(v) { var $x = ["Right",1,v]; $x.__enum__ = haxe_ds_Either; $x.toString = $estr; return $x; };
-var haxe_ds_IntMap = function() {
-	this.h = { };
-};
-haxe_ds_IntMap.__name__ = ["haxe","ds","IntMap"];
-haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
-haxe_ds_IntMap.prototype = {
-	h: null
-	,get: function(key) {
-		return this.h[key];
-	}
-	,remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) {
-			return false;
-		}
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) if(this.h.hasOwnProperty(key)) {
-			a.push(key | 0);
-		}
-		return HxOverrides.iter(a);
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref[i];
-		}};
-	}
-	,toString: function() {
-		var s_b = "";
-		s_b += "{";
-		var it = this.keys();
-		var i = it;
-		while(i.hasNext()) {
-			var i1 = i.next();
-			s_b += i1 == null ? "null" : "" + i1;
-			s_b += " => ";
-			s_b += Std.string(Std.string(this.h[i1]));
-			if(it.hasNext()) {
-				s_b += ", ";
-			}
-		}
-		s_b += "}";
-		return s_b;
-	}
-	,__class__: haxe_ds_IntMap
-};
 var haxe_ds_List = function() {
 	this.length = 0;
 };
@@ -913,6 +985,32 @@ haxe_ds_Option.Some = function(v) { var $x = ["Some",0,v]; $x.__enum__ = haxe_ds
 haxe_ds_Option.None = ["None",1];
 haxe_ds_Option.None.toString = $estr;
 haxe_ds_Option.None.__enum__ = haxe_ds_Option;
+var haxe_ds__$StringMap_StringMapIterator = function(map,keys) {
+	this.map = map;
+	this.keys = keys;
+	this.index = 0;
+	this.count = keys.length;
+};
+haxe_ds__$StringMap_StringMapIterator.__name__ = ["haxe","ds","_StringMap","StringMapIterator"];
+haxe_ds__$StringMap_StringMapIterator.prototype = {
+	map: null
+	,keys: null
+	,index: null
+	,count: null
+	,hasNext: function() {
+		return this.index < this.count;
+	}
+	,next: function() {
+		var _this = this.map;
+		var key = this.keys[this.index++];
+		if(__map_reserved[key] != null) {
+			return _this.getReserved(key);
+		} else {
+			return _this.h[key];
+		}
+	}
+	,__class__: haxe_ds__$StringMap_StringMapIterator
+};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -980,6 +1078,28 @@ haxe_ds_StringMap.prototype = {
 			}
 		}
 		return out;
+	}
+	,iterator: function() {
+		return new haxe_ds__$StringMap_StringMapIterator(this,this.arrayKeys());
+	}
+	,toString: function() {
+		var s_b = "";
+		s_b += "{";
+		var keys = this.arrayKeys();
+		var _g1 = 0;
+		var _g = keys.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var k = keys[i];
+			s_b += k == null ? "null" : "" + k;
+			s_b += " => ";
+			s_b += Std.string(Std.string(__map_reserved[k] != null ? this.getReserved(k) : this.h[k]));
+			if(i < keys.length - 1) {
+				s_b += ", ";
+			}
+		}
+		s_b += "}";
+		return s_b;
 	}
 	,__class__: haxe_ds_StringMap
 };
@@ -1404,12 +1524,21 @@ js_jquery_JqIterator.prototype = {
 	}
 	,__class__: js_jquery_JqIterator
 };
+var keyboard__$KeyBoardManager_ModKeyString_$Impl_$ = {};
+keyboard__$KeyBoardManager_ModKeyString_$Impl_$.__name__ = ["keyboard","_KeyBoardManager","ModKeyString_Impl_"];
+keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString = function(m) {
+	return "" + m.key + "--" + m.mod;
+};
+keyboard__$KeyBoardManager_ModKeyString_$Impl_$.fromString = function(m) {
+	var splited = m.split("--");
+	return { key : Std.parseInt(splited[0]), mod : Std.parseInt(splited[1])};
+};
 var keyboard_KeyBoardManager = function() {
 	this.enabled = true;
-	this.listenersOnce = new haxe_ds_IntMap();
-	this.listeners = new haxe_ds_IntMap();
+	this.listenersOnce = new haxe_ds_StringMap();
+	this.listeners = new haxe_ds_StringMap();
 	this.st = tink_core__$Signal_Signal_$Impl_$.trigger();
-	this.signal = this.st;
+	keyboard_KeyBoardManager.signal = this.st;
 };
 keyboard_KeyBoardManager.__name__ = ["keyboard","KeyBoardManager"];
 keyboard_KeyBoardManager.getInstance = function() {
@@ -1438,56 +1567,104 @@ keyboard_KeyBoardManager.prototype = {
 	listeners: null
 	,listenersOnce: null
 	,enabled: null
-	,signal: null
 	,st: null
 	,muteListener: function(key,func) {
 	}
 	,wakeListener: function(key,func) {
 	}
-	,addListener: function(key,func) {
-		this.listeners.h[key] = func;
+	,addListener: function(key,func,mod) {
+		var touch = { key : key, mod : null};
+		if(mod != null) {
+			touch.mod = mod;
+		}
+		var this1 = this.listeners;
+		var key1 = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(touch);
+		var _this = this1;
+		if(__map_reserved[key1] != null) {
+			_this.setReserved(key1,func);
+		} else {
+			_this.h[key1] = func;
+		}
 		this.listen();
-		haxe_Log.trace(this.listeners.toString(),{ fileName : "KeyBoardManager.hx", lineNumber : 39, className : "keyboard.KeyBoardManager", methodName : "addListener"});
+		haxe_Log.trace(this.listeners.toString(),{ fileName : "KeyBoardManager.hx", lineNumber : 61, className : "keyboard.KeyBoardManager", methodName : "addListener"});
 		return this;
 	}
-	,addOnce: function(key,func) {
-		this.listenersOnce.h[key] = func;
+	,addOnce: function(key,func,mod) {
+		var touch = { key : key};
+		if(mod != null) {
+			touch.mod = mod;
+		}
+		var this1 = this.listenersOnce;
+		var key1 = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(touch);
+		var _this = this1;
+		if(__map_reserved[key1] != null) {
+			_this.setReserved(key1,func);
+		} else {
+			_this.h[key1] = func;
+		}
 		this.listenOnce();
 		return this;
 	}
 	,addListenerOut: function(key,func,forkey) {
 		throw new js__$Boot_HaxeError("not implmented yed");
 	}
-	,removeListener: function(key,func) {
-		keyboard_KeyBoardManager.removeInMap(this.listeners,key,func);
+	,removeListener: function(touch,func) {
+		keyboard_KeyBoardManager.removeInMap(this.listeners,keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(touch),func);
 		this.listen();
 	}
 	,removeAll: function() {
 		var n = this.listeners.keys();
 		while(n.hasNext()) {
 			var n1 = n.next();
-			this.removeListener(n1);
+			this.removeListener(keyboard__$KeyBoardManager_ModKeyString_$Impl_$.fromString(n1));
 		}
 		this.restart();
+	}
+	,getModifier: function(e) {
+		var code = e.keyCode;
+		if(!e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+			return { key : code, mod : null};
+		}
+		if(e.altKey) {
+			return { key : code, mod : 18};
+		}
+		if(e.ctrlKey) {
+			return { key : code, mod : 17};
+		}
+		if(e.metaKey) {
+			return { key : code, mod : 224};
+		}
+		if(e.shiftKey) {
+			return { key : code, mod : 16};
+		}
+		return { key : code, mod : null};
 	}
 	,mok: null
 	,listen: function() {
 		var _gthis = this;
 		this.restart();
 		this.mok = function(e) {
-			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 68, className : "keyboard.KeyBoardManager", methodName : "listen"});
-			var code = e.keyCode;
-			if(code == null || code == 0) {
+			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 113, className : "keyboard.KeyBoardManager", methodName : "listen"});
+			var ki = e.keyCode;
+			if(ki == null || ki == 0) {
 				throw new js__$Boot_HaxeError("nope key");
 			}
-			var caller = _gthis.listeners.h[code];
+			var code = _gthis.getModifier(e);
+			var this1 = _gthis.listeners;
+			var key = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(code);
+			var _this = this1;
+			var caller = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
 			tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.st.handlers,Std.string(code));
-			var allkeys = _gthis.listeners.h[999];
+			var this11 = _gthis.listeners;
+			var key1 = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString({ key : 999, mod : null});
+			var _this1 = this11;
+			var allkeys = __map_reserved[key1] != null ? _this1.getReserved(key1) : _this1.h[key1];
 			if(allkeys != null) {
-				allkeys(code);
+				allkeys();
 			}
 			if(caller != null) {
-				caller(code);
+				haxe_Log.trace("called",{ fileName : "KeyBoardManager.hx", lineNumber : 126, className : "keyboard.KeyBoardManager", methodName : "listen"});
+				caller();
 			}
 		};
 		window.document.addEventListener("keyup",this.mok);
@@ -1496,21 +1673,28 @@ keyboard_KeyBoardManager.prototype = {
 		var _gthis = this;
 		this.restart();
 		this.mok = function(e) {
-			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 90, className : "keyboard.KeyBoardManager", methodName : "listenOnce"});
-			var code = e.keyCode;
-			if(code == null || code == 0) {
+			haxe_Log.trace("key code=" + e.keyCode,{ fileName : "KeyBoardManager.hx", lineNumber : 137, className : "keyboard.KeyBoardManager", methodName : "listenOnce"});
+			var ki = e.keyCode;
+			if(ki == null || ki == 0) {
 				throw new js__$Boot_HaxeError("nope key");
 			}
-			var caller = _gthis.listenersOnce.h[code];
+			var code = _gthis.getModifier(e);
+			var this1 = _gthis.listenersOnce;
+			var key = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(code);
+			var _this = this1;
+			var caller = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
 			tink_core__$Callback_CallbackList_$Impl_$.invoke(_gthis.st.handlers,Std.string(code));
-			var allkeys = _gthis.listenersOnce.h[999];
+			var this11 = _gthis.listenersOnce;
+			var key1 = keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString({ key : 999});
+			var _this1 = this11;
+			var allkeys = __map_reserved[key1] != null ? _this1.getReserved(key1) : _this1.h[key1];
 			if(allkeys != null) {
-				allkeys(code);
+				allkeys();
 			}
 			if(caller != null) {
-				caller(code);
+				caller();
 				caller = null;
-				_gthis.listenersOnce.remove(code);
+				_gthis.listenersOnce.remove(keyboard__$KeyBoardManager_ModKeyString_$Impl_$.toString(code));
 			}
 		};
 		window.document.addEventListener("keyup",this.mok);
@@ -1530,13 +1714,11 @@ keyboard_NoteType.Sticky = ["Sticky",1];
 keyboard_NoteType.Sticky.toString = $estr;
 keyboard_NoteType.Sticky.__enum__ = keyboard_NoteType;
 var keyboard_KeyNote = function() {
-	keyboard_KeyBoardManager.getInstance().signal.handle($bind(this,this.onTime));
+	keyboard_KeyBoardManager.signal.handle($bind(this,this.onTime));
 };
 keyboard_KeyNote.__name__ = ["keyboard","KeyNote"];
 keyboard_KeyNote.prototype = {
-	onTime: function(s) {
-		var char = String.fromCharCode(Std.parseInt(s));
-		char = char != "" ? char : s;
+	onTime: function(touch) {
 		return true;
 	}
 	,__class__: keyboard_KeyNote

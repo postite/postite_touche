@@ -62,7 +62,7 @@ class TestKeyBoard extends utest.Test {
 
 	@:timeout(250)
 	function testKB(async:utest.Async) {
-		KB.addListener(P, (k) -> {
+		KB.addListener(P,() -> {
 			Assert.isTrue(true); // put a sensible test here
 			async.done();
 		});
@@ -74,7 +74,7 @@ class TestKeyBoard extends utest.Test {
 	@:timeout(250)
 	function testKB2(async:utest.Async) {
 		
-		KB.addListener(R, (?k) -> {
+		KB.addListener(R, () -> {
 			Assert.isTrue(true); // put a sensible test here
 			async.done();
 		});
@@ -93,7 +93,7 @@ class TestKeyBoard extends utest.Test {
 
 	public static function createEvent(kc:KeyCode) {
 		trace("createEvent  " + kc);
-		var event = new js.html.KeyboardEvent("keyup", {keyCode: kc});
+		var event = new js.html.KeyboardEvent("keyup", {keyCode : kc});
 		doc.dispatchEvent(event);
 	}
 }
