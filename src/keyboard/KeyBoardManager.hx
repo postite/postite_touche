@@ -58,7 +58,7 @@ public function addListener(key:KeyCode,func:Funk,?mod:Mod):KeyBoardManager{
     
     listeners.set(touch,func);
     listen();
-    trace(listeners);
+  //  trace(listeners);
     return this;
 }
 public function addOnce(key:KeyCode,func:Funk,?mod:Mod):KeyBoardManager{
@@ -110,7 +110,7 @@ var mok:js.html.KeyboardEvent->Void;
 public function listen(){
     restart();
      mok=function(e:KeyboardEvent){
-         trace("key code="+ e.keyCode);
+        // trace("key code="+ e.keyCode);
             var ki:KeyCode = e.keyCode;
             if (ki==null || ki==0) throw "nope key";
             var code=getModifier(e);
@@ -123,7 +123,7 @@ public function listen(){
                 allkeys();//callAllkeys
             }
             if (caller!=null){
-                trace( "called");
+              //  trace( "called");
             caller();  // it's a call
             }
             
@@ -134,7 +134,7 @@ public function listen(){
 public function listenOnce(){
     restart();
      mok=function(e){
-         trace("key code="+ e.keyCode);
+         //trace("key code="+ e.keyCode);
          var ki:KeyCode = e.keyCode;
          if (ki==null || ki==0) throw "nope key";
          var code=getModifier(e);
